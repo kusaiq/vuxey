@@ -1,5 +1,6 @@
 // ** React Imports
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+import { useEffect } from 'react'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -7,8 +8,13 @@ import Avatar from '@components/avatar'
 // ** Third Party Components
 import { Card, CardBody, CardText, Button, Row, Col } from 'reactstrap'
 import { DollarSign, TrendingUp, User, Check, Star, Flag, Phone } from 'react-feather'
+import {deleteUser} from "../../user/store/action/index"
+import {useDispatch} from "react-redux"
 
 const UserInfoCard = ({ selectedUser }) => {
+
+  const dispatch = useDispatch()
+  const history = useHistory()
   // ** render user img
   const renderUserImg = () => {
     if (selectedUser !== null && selectedUser.image !== null) {
@@ -38,6 +44,20 @@ const UserInfoCard = ({ selectedUser }) => {
     }
   }
 
+  useEffect(() => {
+    if (selectedUser.id) {
+        return null
+    } else  {
+      history.push('/home')
+    }
+}, [selectedUser.id, history])
+
+  const onDelete = () => {
+    dispatch(deleteUser(selectedUser.id)
+    )
+    history.push('/apps/user/list')
+  }
+
   return (
     <Card>
       <CardBody>
@@ -57,7 +77,7 @@ const UserInfoCard = ({ selectedUser }) => {
                     <Button.Ripple tag={Link} to={`/apps/user/edit/${selectedUser.id}`} color='primary'>
                       Edit
                     </Button.Ripple>
-                    <Button.Ripple className='ml-1' color='danger' outline>
+                    <Button.Ripple className='ml-1' color='danger' outline onClick={onDelete} >
                       Delete
                     </Button.Ripple>
                   </div>
@@ -116,10 +136,10 @@ const UserInfoCard = ({ selectedUser }) => {
                     Role
                   </CardText>
                 </div>
-                <CardText className='text-capitalize mb-0'>
+                {/* <CardText className='text-capitalize mb-0'>
                   {console.log(selectedUser)}
                   {selectedUser !== null ? selectedUser.role.name : 'Admin'}
-                </CardText>
+                </CardText> */}
               </div>
               {/* <div className='d-flex flex-wrap align-items-center my-50'>
                 <div className='user-info-title'>

@@ -5,13 +5,19 @@ import { useState, useEffect } from 'react'
 import Avatar from '@components/avatar'
 
 // // ** Third Party Components
-import { Lock, Edit, Trash2 } from 'react-feather'
+// import { Lock, Edit, Trash2 } from 'react-feather'
 import { Media, Row, Col, Button, Form, Input, Label, FormGroup, Table, CustomInput } from 'reactstrap'
+import { useForm } from 'react-hook-form'
+
+import {editUser} from "../../user/store/action/index"
+import {useDispatch} from "react-redux"
 
 const UserAccountTab = ({ selectedUser }) => {
 //   // ** States
   const [img, setImg] = useState(null)
+  const [role, setRole] = useState(selectedUser.role)
   const [userData, setUserData] = useState(null)
+  const dispatch = useDispatch()
 
 //   // ** Function to change user image
 //   const onChange = e => {
@@ -24,16 +30,42 @@ const UserAccountTab = ({ selectedUser }) => {
 //   }
 
 //   // ** Update user image on mount or change
+
+//vars
+const { register, handleSubmit } = useForm()
   useEffect(() => {
     if (selectedUser !== null || (selectedUser !== null && userData !== null && selectedUser.id !== userData.id)) {
       setUserData(selectedUser)
-    //   if (selectedUser.image !== null) {
-    //     return setImg(selectedUser.avatar)
-    //   } else {
-    //     return setImg(null)
-    //   }
+      if (selectedUser.image !== null) {
+        return setImg(selectedUser.image)
+      } else {
+        return setImg(null)
+      }
     }
   }, [selectedUser, userData])
+
+//onSubmit
+  const onSubmit = (values, e) => {
+      dispatch(
+        editUser({
+          role,
+          username: values.username,
+          // password: values.password,
+          // country: values.country,
+          // phone: values.phone,
+          email: values.email,
+          id : selectedUser.id
+          // currentPlan: plan,
+          // status: 'active',
+          // avatar: ''
+        })
+      )
+      window.location.reload()
+  }
+
+  const reset = () => {
+    window.location.reload()
+  }
 
 //   // ** Renders User
   const renderUserAvatar = () => {
@@ -46,7 +78,7 @@ const UserAccountTab = ({ selectedUser }) => {
           initials
           color={color}
           className='rounded mr-2 my-25'
-          content={selectedUser.fullName}
+          content={selectedUser.username}
           contentStyles={{
             borderRadius: 0,
             fontSize: 'calc(36px)',
@@ -72,189 +104,48 @@ const UserAccountTab = ({ selectedUser }) => {
     }
   }
 
-  if (userData === null || userData === undefined) {
-    return null
-  } else {
+  
     return (
-      <Row>
+      <>
+      { userData === null || userData === undefined ? (null) : (<Row>
         <Col sm='12'>
           <Media className='mb-2'>
             {renderUserAvatar()}
             <Media className='mt-50' body>
               <h4>{selectedUser.username} </h4>
-              {/* <div className='d-flex flex-wrap mt-1 px-0'>
-                <Button.Ripple id='change-img' tag={Label} className='mr-75 mb-0' color='primary'>
-                  <span className='d-none d-sm-block'>Change</span>
-                  <span className='d-block d-sm-none'>
-                    <Edit size={14} />
-                  </span>
-                  <input type='file' hidden id='change-img' onChange={onChange} accept='image/*' />
-                </Button.Ripple>
-                <Button.Ripple color='secondary' outline>
-                  <span className='d-none d-sm-block'>Remove</span>
-                  <span className='d-block d-sm-none'>
-                    <Trash2 size={14} />
-                  </span>
-                </Button.Ripple>
-              </div> */}
             </Media>
           </Media>
         </Col>
         <Col sm='12'>
-          <Form onSubmit={e => e.preventDefault()}>
+          <Form onSubmit={handleSubmit(onSubmit)}>
             <Row>
               <Col md='4' sm='12'>
                 <FormGroup>
                   <Label for='username'>Username</Label>
-                  <Input type='text' id='username' placeholder='Username' defaultValue={userData.username} />
+                  <Input type='text' id='username' placeholder='Username' defaultValue={userData.username} name='username' innerRef={register({ required: false })} />
                 </FormGroup>
               </Col>
-              {/* <Col md='4' sm='12'>
-                <FormGroup>
-                  <Label for='name'>Name</Label>
-                  <Input type='text' id='name' placeholder='Name' defaultValue={userData.fullName} />
-                </FormGroup>
-              </Col> */}
               <Col md='4' sm='12'>
                 <FormGroup>
                   <Label for='email'>Email</Label>
-                  <Input type='text' id='email' placeholder='Email' defaultValue={userData.email} />
+                  <Input type='text' id='email' name='email' placeholder='john.doe@example.com' innerRef={register({ required: false })}  defaultValue={userData.email} />
                 </FormGroup>
               </Col>
-              {/* <Col md='4' sm='12'>
-                <FormGroup>
-                  <Label for='status'>Status</Label>
-                  <Input type='select' name='status' id='status' defaultValue={userData.status}>
-                    <option value='pending'>Pending</option>
-                    <option value='active'>Active</option>
-                    <option value='inactive'>Inactive</option>
-                  </Input>
-                </FormGroup>
-              </Col> */}
               <Col md='4' sm='12'>
                 <FormGroup>
                   <Label for='role'>Role</Label>
-                  <Input type='select' name='role' id='role' defaultValue={userData.role}>
+                  <Input type='select' id='user-role' name='user-role' value={role} onChange={e => setRole(e.target.value)} defaultValue={userData.role}>
                     <option value={2}>Public</option>
                     <option value={1}>Authenticated</option>
                     <option value={3}>Xadmin</option>
-                    {/* <option value='maintainer'>Maintainer</option>
-                    <option value='subscriber'>Subscriber</option> */}
                   </Input>
                 </FormGroup>
               </Col>
-              {/* <Col md='4' sm='12'>
-                <FormGroup>
-                  <Label for='company'>Company</Label>
-                  <Input
-                    type='text'
-                    id='company'
-                    defaultValue={userData.company}
-                    placeholder='WinDon Technologies Pvt Ltd'
-                  />
-                </FormGroup>
-              </Col> */}
-              {/* <Col sm='12'>
-                <div className='permissions border mt-1'>
-                  <h6 className='py-1 mx-1 mb-0 font-medium-2'>
-                    <Lock size={18} className='mr-25' />
-                    <span className='align-middle'>Permissions</span>
-                  </h6>
-                  <Table borderless striped responsive>
-                    <thead className='thead-light'>
-                      <tr>
-                        <th>Module</th>
-                        <th>Read</th>
-                        <th>Write</th>
-                        <th>Create</th>
-                        <th>Delete</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Admin</td>
-                        <td>
-                          <CustomInput type='checkbox' id='admin-1' label='' defaultChecked />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='admin-2' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='admin-3' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='admin-4' label='' />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Staff</td>
-                        <td>
-                          <CustomInput type='checkbox' id='staff-1' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='staff-2' label='' defaultChecked />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='staff-3' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='staff-4' label='' />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Author</td>
-                        <td>
-                          <CustomInput type='checkbox' id='author-1' label='' defaultChecked />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='author-2' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='author-3' label='' defaultChecked />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='author-4' label='' />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>Contributor</td>
-                        <td>
-                          <CustomInput type='checkbox' id='contributor-1' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='contributor-2' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='contributor-3' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='contributor-4' label='' />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>User</td>
-                        <td>
-                          <CustomInput type='checkbox' id='user-1' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='user-2' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='user-3' label='' />
-                        </td>
-                        <td>
-                          <CustomInput type='checkbox' id='user-4' label='' defaultChecked />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </div>
-              </Col> */}
               <Col className='d-flex flex-sm-row flex-column mt-2' sm='12'>
                 <Button.Ripple className='mb-1 mb-sm-0 mr-0 mr-sm-1' type='submit' color='primary'>
                   Save Changes
                 </Button.Ripple>
-                <Button.Ripple color='secondary' outline>
+                <Button.Ripple color='secondary' onClick={(reset)} outline>
                   Reset
                 </Button.Ripple>
               </Col>
@@ -262,7 +153,8 @@ const UserAccountTab = ({ selectedUser }) => {
           </Form>
         </Col>
       </Row>
+       ) }
+    </>
     )
-  }
-}
+ }
 export default UserAccountTab

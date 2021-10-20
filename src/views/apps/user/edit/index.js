@@ -31,7 +31,6 @@ const UserEdit = () => {
   // ** Function to get user on mount
   useEffect(() => {
     dispatch(getUser(parseInt(id)))
-    return () => dispatch(getUser(parseInt(0)))
   }, [dispatch, id])
 
   return store.selectedUser !== null && store.selectedUser !== undefined ? (
@@ -46,29 +45,29 @@ const UserEdit = () => {
                   <span className='align-middle d-none d-sm-block'>Account</span>
                 </NavLink>
               </NavItem>
-              {/* <NavItem>
+              <NavItem>
                 <NavLink active={activeTab === '2'} onClick={() => toggle('2')}>
                   <Info size={14} />
                   <span className='align-middle d-none d-sm-block'>Information</span>
                 </NavLink>
-              </NavItem> */}
-              {/* <NavItem>
+              </NavItem>
+              <NavItem>
                 <NavLink active={activeTab === '3'} onClick={() => toggle('3')}>
                   <Share2 size={14} />
                   <span className='align-middle d-none d-sm-block'>Social</span>
                 </NavLink>
-              </NavItem> */}
+              </NavItem>
             </Nav>
             <TabContent activeTab={activeTab}>
               <TabPane tabId='1'>
                 <AccountTab selectedUser={store.selectedUser} />
               </TabPane>
-              {/* <TabPane tabId='2'>
-                <InfoTab />
-              </TabPane> */}
-              {/* <TabPane tabId='3'>
-                <SocialTab />
-              </TabPane> */}
+              <TabPane tabId='2'>
+                {/* <InfoTab /> */}
+              </TabPane>
+              <TabPane tabId='3'>
+                {/* <SocialTab /> */}
+              </TabPane>
             </TabContent>
           </CardBody>
         </Card>

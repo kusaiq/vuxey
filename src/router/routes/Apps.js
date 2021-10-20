@@ -1,6 +1,7 @@
 import { lazy } from 'react'
 import { Redirect } from 'react-router-dom'
 
+
 const AppRoutes = [
   // {
   //   path: '/apps/email',
@@ -146,7 +147,7 @@ const AppRoutes = [
   {
     path: '/apps/user/edit',
     exact: true,
-    component: () => <Redirect to='/apps/user/edit/1' />
+    component: () => <Redirect to='/apps/user/edit/' />
   },
   {
     path: '/apps/user/edit/:id',
@@ -158,7 +159,7 @@ const AppRoutes = [
   {
     path: '/apps/user/view',
     exact: true,
-    component: () => <Redirect to='/apps/user/view/1' />
+    component: () => <Redirect to='/apps/user/view/' />
   },
   {
     path: '/apps/user/view/:id',

@@ -17,7 +17,7 @@ const renderClient = row => {
   const stateNum = Math.floor(Math.random() * 6),
     states = ['light-success', 'light-danger', 'light-warning', 'light-info', 'light-primary', 'light-secondary'],
     color = states[stateNum]
-console.log(row)
+
   if (row.image_url) {
     return <Avatar className='mr-1' img={row.image_url} width='32' height='32' />
   } else {
@@ -133,16 +133,16 @@ export const columns = [
             tag={Link}
             to={`/apps/user/view/${row.id}`}
             className='w-100'
-            //onClick={() => store.dispatch(getUser(row.id))}
+            onClick={() => store.dispatch(getUser(row.id))}
           >
             <FileText size={14} className='mr-50' />
             <span className='align-middle'>Details</span>
           </DropdownItem>
           <DropdownItem
             tag={Link}
-            //to={`/apps/user/edit/${row.id}`}
+            to={`/apps/user/edit/${row.id}`}
             className='w-100'
-           // onClick={() => store.dispatch(getUser(row.id))}
+           onClick={() => store.dispatch(getUser(row.id))}
           >
             <Archive size={14} className='mr-50' />
             <span className='align-middle'>Edit</span>

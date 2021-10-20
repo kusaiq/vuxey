@@ -17,19 +17,19 @@ export default [
         title: 'List',
         icon: <Circle size={12} />,
         navLink: '/apps/user/list'
-      },
-      {
-        id: 'view',
-        title: 'View',
-        icon: <Circle size={12} />,
-        navLink: '/apps/user/view'
-      },
-      {
-        id: 'edit',
-        title: 'Edit',
-        icon: <Circle size={12} />,
-        navLink: '/apps/user/edit'
       }
+      // {
+      //   id: 'view',
+      //   title: 'View',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/apps/user/view/'
+      // },
+      // {
+      //   id: 'edit',
+      //   title: 'Edit',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/apps/user/edit'
+      // }
     ]
   }
 

@@ -27,11 +27,16 @@ const UserView = props => {
 
 //   // ** Get suer on mount
   useEffect(() => {
+   
     dispatch(getUser(parseInt(id)))
+    
   }, [dispatch])
 
+  
   return store.selectedUser !== null && store.selectedUser !== undefined ? (
+    
     <div className='app-user-view'>
+      {console.log(store.selectedUser.id)}
       <Row>
         <Col xl='9' lg='8' md='7'>
           <UserInfoCard selectedUser={store.selectedUser} />
